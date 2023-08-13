@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 if [ "$PRE_START_SCRIPT" != "" ]
 then
   sh "$PRE_START_SCRIPT"
