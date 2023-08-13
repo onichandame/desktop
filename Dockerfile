@@ -1,4 +1,4 @@
-FROM onichandame/alpine:3.18
+FROM alpine:3.18
 
 # Desktop Environment
 RUN apk add plasma xrdp xorgxrdp kde-applications-base 
