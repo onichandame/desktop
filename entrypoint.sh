@@ -1,3 +1,8 @@
+if [ "$PRE_START_SCRIPT" != "" ]
+then
+  sh "$PRE_START_SCRIPT"
+fi
+
 password=$ROOT_PASSWORD
 if [ "$password" = "" ]
 then
