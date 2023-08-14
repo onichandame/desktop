@@ -1,0 +1,28 @@
+name: Release Helm Charts
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - helm/**
+      - .github/workflows/helm.yml
+jobs:
+  release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+      - name: Release Charts
+        uses: helm/chart-releaser-action@v1.6.0
+        env:
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          charts_dir: helm
+          

@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "desktop.fullname" . }}
+  labels:
+    {{- include "desktop.labels" . | nindent 4 }}
+spec:
+  # Always 1 instance
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "desktop.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "desktop.fullname" . }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "desktop.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: USERNAME
+              value: {{ .Values.user.name | quote }}
+            - name: PASSWORD
+              value: {{ .Values.user.password | quote }}
+            {{- with .Values.hooks }}
+            {{- with .preStart }}
+            - name: PRE_START_SCRIPT
+              value: {{ . | quote }}
+            {{- end }}
+            {{- end }}
+          ports:
+            - name: rdp
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          volumeMounts:
+            {{- if .Values.persistance.enabled }}
+            - name: home
+              mountPath: /home/{{ .Values.user.name }}
+              readOnly: false
+            {{- end }}
+          livenessProbe:
+            tcpSocket:
+              port: rdp
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            failureThreshold: 240
+          readinessProbe:
+            tcpSocket:
+              port: rdp
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            failureThreshold: 240
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- with .Values.sidecars }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.volumes }}
+    volumes:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+  {{- with .Values.persistance }}
+  {{- if .enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: home
+      spec:
+        {{- with .accessModes }}
+        accessModes:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .storageClassName }}
+        storageClassName: {{ . }}
+        {{- end }}
+        {{- with .capacity }}
+        resources:
+          requests:
+            storage: {{ . }}
+        {{- end }}
+  {{- end }}
+  {{- end }}
+    
