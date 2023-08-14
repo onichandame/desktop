@@ -1,0 +1,9 @@
+apiVersion: v2
+name: desktop-charts
+description: Desktop Charts
+type: application
+version: 0.1.0
+appVersion: 0.1.0
+dependencies:
+  - name: desktop
+    version: 0.1.0
