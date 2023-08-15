@@ -27,6 +27,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
+        {{- if .Values.persistance }}
         - name: set-home-dir-ownership
           image: alpine:latest
           command:
@@ -34,6 +35,11 @@ spec:
           args:
             - 1000:1000
             - /home/{{ .Values.user.name }}
+          volumeMounts:
+            - name: home
+              mountPath: /home/{{ .Values.user.name }}
+              readOnly: false
+        {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
