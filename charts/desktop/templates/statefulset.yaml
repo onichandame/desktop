@@ -58,7 +58,7 @@ spec:
               mountPath: /home/{{ .Values.user.name }}
               readOnly: false
           {{- end }}
-          {{- range .Values.volumeMounts -}}
+          {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           livenessProbe:
