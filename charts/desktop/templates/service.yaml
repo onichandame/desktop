@@ -7,9 +7,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: {{ include "desktop.service.port" . }}
+      targetPort: rdp
       protocol: TCP
-      name: http
+      name: rdp
   selector:
     {{- include "desktop.selectorLabels" . | nindent 4 }}

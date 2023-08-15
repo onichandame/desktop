@@ -45,7 +45,7 @@ spec:
             {{- end }}
           ports:
             - name: rdp
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ include "desktop.service.port" . }}
               protocol: TCP
           volumeMounts:
           {{- if .Values.hooks.preStart }}
