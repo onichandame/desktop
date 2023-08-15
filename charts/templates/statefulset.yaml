@@ -38,9 +38,9 @@ spec:
             - name: PASSWORD
               value: {{ .Values.user.password | quote }}
             {{- with .Values.hooks }}
-            {{- with .preStart }}
+            {{- if .preStart }}
             - name: PRE_START_SCRIPT
-              value: {{ . | quote }}
+              value: /prestart.sh
             {{- end }}
             {{- end }}
           ports:
@@ -48,7 +48,12 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           volumeMounts:
-            {{- if .Values.persistance.enabled }}
+            {{- if .Values.hooks.preStart }}
+            - name: scripts
+              mountPath: /prestart.sh
+              subPath: preStart
+            {{- end }}
+            {{- if .Values.persistance }}
             - name: home
               mountPath: /home/{{ .Values.user.name }}
               readOnly: false
@@ -82,12 +87,17 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-    {{- with .Values.volumes }}
-    volumes:
-      {{- toYaml . | nindent 6 }}
-    {{- end }}
+      volumes:
+      {{- if .Values.hooks }}
+        - name: scripts
+          configMap:
+            name: {{ include "desktop.scriptsName" . }}
+      {{- end }}
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
   {{- with .Values.persistance }}
-  {{- if .enabled }}
+  {{- if . }}
   volumeClaimTemplates:
     - metadata:
         name: home

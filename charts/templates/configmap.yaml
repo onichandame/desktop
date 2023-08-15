@@ -1,0 +1,16 @@
+# https://kubernetes.io/docs/concepts/configuration/configmap/
+{{- if .Values.hooks }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "desktop.scriptsName" . }}
+  labels:
+    {{- include "desktop.labels" . | nindent 4 }}
+data:
+  {{- with .Values.hooks }}
+  {{- with .preStart }}
+  preStart: |
+    {{- . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+{{- end }}

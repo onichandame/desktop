@@ -13,10 +13,10 @@ user:
   password: password
 
 hooks: {}
-  # preStart: /prestart.sh
+  # preStart: ls -a
+  # configMapName: scripts
 
 persistance:
-  enabled: false
   # accessModes: ['ReadWriteOnce']
   # storageClassName: local-path
   # capacity: 10Gi

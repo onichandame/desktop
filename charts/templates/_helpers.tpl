@@ -24,6 +24,14 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
+Define scripts configmap
+*/}}
+{{- define "desktop.scriptsName" -}}
+{{- $name := printf "%s-scripts" (include "desktop.fullname" .) }}
+{{- default $name .Values.hooks.configMapName }}
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "desktop.chart" -}}
