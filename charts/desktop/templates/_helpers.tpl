@@ -39,13 +39,6 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
-Define service
-*/}}
-{{- define "desktop.service.port" -}}
-{{- default 3389 .Values.service.port }}
-{{- end }}
-
-{{/*
 Common labels
 */}}
 {{- define "desktop.labels" -}}
