@@ -5,7 +5,7 @@ on:
       - master
       - main
     paths:
-      - helm/**
+      - charts/**
       - .github/workflows/helm.yml
   workflow_dispatch:
 jobs:
