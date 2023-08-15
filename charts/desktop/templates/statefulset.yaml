@@ -26,6 +26,14 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: set-home-dir-ownership
+          image: alpine:latest
+          command:
+            - chown
+          args:
+            - 1000:1000
+            - /home/{{ .Values.user.name }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
