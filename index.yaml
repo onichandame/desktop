@@ -3,6 +3,16 @@ entries:
   desktop:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2023-08-15T05:51:57.129870979Z"
+    description: A fully fledged desktop environment
+    digest: 0660a86cb673b9a11147b3e718be68f9ba60f9c0804feab17a1b96d177bcae6e
+    name: desktop
+    type: application
+    urls:
+    - https://github.com/onichandame/desktop/releases/download/desktop-0.1.6/desktop-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2023-08-15T05:00:30.694565278Z"
     description: A fully fledged desktop environment
     digest: 5bf3f2965af19b478aa5b06efb06fc0db2118771142d6e35aab2796f218eeb10
@@ -41,4 +51,4 @@ entries:
     urls:
     - https://github.com/onichandame/desktop/releases/download/desktop-0.1.1/desktop-0.1.1.tgz
     version: 0.1.1
-generated: "2023-08-15T05:00:30.694583578Z"
+generated: "2023-08-15T05:51:57.129887579Z"
