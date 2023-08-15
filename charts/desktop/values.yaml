@@ -64,4 +64,6 @@ affinity: {}
 
 volumes: []
 
+volumeMounts: []
+
 sidecars: []

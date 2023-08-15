@@ -48,16 +48,19 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           volumeMounts:
-            {{- if .Values.hooks.preStart }}
+          {{- if .Values.hooks.preStart }}
             - name: scripts
               mountPath: /prestart.sh
               subPath: preStart
-            {{- end }}
-            {{- if .Values.persistance }}
+          {{- end }}
+          {{- if .Values.persistance }}
             - name: home
               mountPath: /home/{{ .Values.user.name }}
               readOnly: false
-            {{- end }}
+          {{- end }}
+          {{- range .Values.volumeMounts -}}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           livenessProbe:
             tcpSocket:
               port: rdp
