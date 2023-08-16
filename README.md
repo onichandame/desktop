@@ -1,6 +1,6 @@
 # Desktop in Docker
 
-Desktop environment in docker with fully configured IDE.
+Desktop environment in docker.
 
 ## Usage
 
